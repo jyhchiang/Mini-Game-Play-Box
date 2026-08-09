@@ -120,9 +120,12 @@ body{
 
     display:flex;
 
-    justify-content:space-between;
+    /* justify-content:space-between; */
+	justify-content:center; /* 改用 center，不再硬推兩端 */
 
     align-items:center;
+	
+	gap: 1.2%;              /* 使用百分比建立均勻間距 */
 
     position:absolute;
 
@@ -137,7 +140,8 @@ body{
 
 .reelBox{
 
-    flex:0 0 13.2%;
+    /* flex:0 0 13.2%; */
+	flex:1;   /* 讓 6 個格子自動平分寬度 */
 
     height:118px;
 
@@ -269,27 +273,27 @@ body{
 
 /* 左邊兩輪往左 */
 
-.reelBox:nth-child(1){
+/*.reelBox:nth-child(1){ */
 
-    transform:translateX(3px);
-}
+    /*transform:translateX(3px);*/
+/*}*/
 
-.reelBox:nth-child(2){
+/*.reelBox:nth-child(2){ */
 
-    transform:translateX(1.2px);
-}
+    /*transform:translateX(1.2px);*/
+/*}*/
 
 /* 右邊兩輪往右 */
 
-.reelBox:nth-child(5){
+/*.reelBox:nth-child(5){*/
 
-    transform:translateX(-1.2px);
-}
+    /*transform:translateX(-1.2px);*/
+/*}*/
 
-.reelBox:nth-child(6){
+/*.reelBox:nth-child(6){*/
 
-    transform:translateX(-2px);
-}
+    /*transform:translateX(-2px);*/
+/*}*/
 
 /* 按鈕 */
 
@@ -406,7 +410,7 @@ button:active{
 
         height:68px;
     }
-
+	/*
     .reelBox:nth-child(1){
 
         transform:translateX(1.5px);
@@ -426,6 +430,7 @@ button:active{
 
         transform:translateX(-1px);
     }
+	*/
 
 
     .num{
