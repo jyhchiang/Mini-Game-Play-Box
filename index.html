@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <!-- 鎖定手機視角，防止放大縮小變形 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>迷你遊戲盒</title>
+  
+  <!-- 載入 FontAwesome 圖示庫與 LINE 圖示 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    /* CSS 重置與基礎設定 */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #f7f8fa;
+      color: #111;
+      padding-bottom: 70px; /* 預留底部導覽列高度 */
+    }
+
+    /* 1. 頂部標題列 (Header) */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background-color: #ffffff;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .line-logo {
+      color: #06c755; /* LINE 官方標準綠 */
+      font-size: 1.8rem;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 1.2rem;
+      color: #222;
+    }
+
+    /* 2. 綠色分享 Banner */
+    .banner-container {
+      padding: 12px 16px 4px 16px;
+    }
+
+    .share-banner {
+      background: linear-gradient(135deg, #06c755, #00b900);
+      color: #ffffff;
+      border-radius: 16px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(6, 199, 85, 0.25);
+      transition: transform 0.1s ease;
+    }
+
+    .share-banner:active {
+      transform: scale(0.98);
+    }
+
+    .share-content {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .share-icon {
+      font-size: 1.6rem;
+    }
+
+    .share-text h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .share-text p {
+      font-size: 0.78rem;
+      opacity: 0.9;
+    }
+
+    .share-arrow {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    /* 3. 區塊標題 (熱門推薦) */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 16px 10px 16px;
+    }
+
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #111;
+    }
+
+    .see-more {
+      font-size: 0.85rem;
+      color: #06c755;
+      text-decoration: none;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    /* 4. 遊戲雙欄網格 (Game Grid) */
+    .game-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 0 16px;
+    }
+
+    .game-card {
+      background: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      transition: transform 0.1s ease;
+    }
+
+    .game-card:active {
+      transform: scale(0.97);
+    }
+
+    /* 封面圖片等比例容器 */
+    .card-img-wrapper {
+      position: relative;
+      width: 100%;
+      padding-top: 135%; /* 保持直立卡片黃金比例 */
+      background-color: #eee;
+    }
+
+    .card-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* 改成 contain：整張圖完整縮放放進框框內 */
+	  background-color: #000000; /* (可選) 圖片若有留白，可用黑底或深色襯托質感 */
+    }
+
+    /* HOT 標籤 */
+    .tag-hot {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #ff3b30;
+      color: #ffffff;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 10px;
+      z-index: 2;
+    }
+
+    /* 卡片文字與數據 */
+    .card-info {
+      padding: 10px 10px 12px 10px;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.72rem;
+      color: #888888;
+    }
+
+    .card-users {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    /* 敬請期待虛線框卡片 */
+    .coming-soon-card {
+      background-color: rgba(255, 255, 255, 0.5);
+      border: 2px dashed #dddddd;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 250px;
+      color: #666666;
+      text-align: center;
+    }
+
+    .plus-circle {
+      width: 44px;
+      height: 44px;
+      background-color: #e5e5e5;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: #666666;
+      margin-bottom: 10px;
+    }
+
+    .coming-soon-text {
+      font-size: 0.82rem;
+      line-height: 1.4;
+      font-weight: 600;
+    }
+
+    /* 5. 底部固定導覽列 (Bottom Nav) */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background-color: #ffffff;
+      display: flex;
+      border-top: 1px solid #f0f0f0;
+      z-index: 100;
+    }
+
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #888888;
+      text-decoration: none;
+      font-size: 0.72rem;
+      gap: 4px;
+    }
+
+    .nav-item i {
+      font-size: 1.2rem;
+    }
+
+    /* 熱門選單標籤 (綠色圓圈包覆效果) */
+    .nav-item.active {
+      color: #06c755;
+      font-weight: 700;
+    }
+
+    .active-icon-bg {
+      background-color: #06c755;
+      color: #ffffff;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. 頂部標題列 -->
+  <header class="header">
+    <div class="header-left">
+      <i class="fa-brands fa-line line-logo"></i>
+      <span>迷你遊戲盒</span>
+    </div>
+    <div class="header-right">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <i class="fa-solid fa-bars"></i>
+    </div>
+  </header>
+
+  <!-- 2. 分享 Banner -->
+  <div class="banner-container">
+    <div class="share-banner" onclick="shareToFriends()">
+      <div class="share-content">
+        <i class="fa-solid fa-share-nodes share-icon"></i>
+        <div class="share-text">
+          <h3>分享給好友一起玩！</h3>
+          <p>和朋友一起挑戰，樂趣加倍！</p>
+        </div>
+      </div>
+      <i class="fa-solid fa-chevron-right share-arrow"></i>
+    </div>
+  </div>
+
+  <!-- 3. 熱門推薦區塊 -->
+  <div class="section-header">
+    <span class="section-title">熱門推薦</span>
+    <a href="#" class="see-more">查看更多 <i class="fa-solid fa-chevron-right"></i></a>
+  </div>
+
+  <!-- 4. 遊戲雙欄列表區塊 -->
+  <main class="game-grid">
+
+    <!-- 遊戲 1：幸運決策轉盤 -->
+    <a href="wheel.html" class="game-card">
+      <div class="card-img-wrapper">
+        <span class="tag-hot">HOT</span>
+        <img src="images/wheel.png" alt="幸運決策轉盤" class="card-img">
+      </div>
+      <div class="card-info">
+        <div class="card-title">幸運決策轉盤</div>
+        <div class="card-meta">
+          <span>工具．休閒</span>
+          <span class="card-users"><i class="fa-solid fa-user"></i> 16,892</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 遊戲 2：今天要吃什麼 -->
+    <a href="food.html" class="game-card">
+      <div class="card-img-wrapper">
+        <img src="images/food.png" alt="今天要吃什麼" class="card-img">
+      </div>
+      <div class="card-info">
+        <div class="card-title">今天要吃什麼</div>
+        <div class="card-meta">
+          <span>美食．益智</span>
+          <span class="card-users"><i class="fa-solid fa-user"></i> 12,531</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 遊戲 3：大樂透開獎機 -->
+    <a href="lotto.html" class="game-card">
+      <div class="card-img-wrapper">
+        <img src="images/lotto.png" alt="大樂透開獎機" class="card-img">
+      </div>
+      <div class="card-info">
+        <div class="card-title">大樂透開獎機</div>
+        <div class="card-meta">
+          <span>運氣．休閒</span>
+          <span class="card-users"><i class="fa-solid fa-user"></i> 8,754</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 敬請期待預留位置 -->
+    <div class="coming-soon-card">
+      <div class="plus-circle">
+        <i class="fa-solid fa-plus"></i>
+      </div>
+      <div class="coming-soon-text">更多精彩<br>敬請期待</div>
+    </div>
+
+  </main>
+
+  <!-- 5. 底部固定選單 -->
+  <nav class="bottom-nav">
+    <a href="#" class="nav-item active">
+      <div class="active-icon-bg">
+        <i class="fa-solid fa-house"></i>
+      </div>
+      <span>熱門</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="fa-solid fa-gamepad"></i>
+      <span>分類</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="fa-solid fa-trophy"></i>
+      <span>排行榜</span>
+    </a>
+  </nav>
+
+  <!-- LINE LIFF 分享觸發 -->
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script>
+    function shareToFriends() {
+      alert("觸發 LINE 分享功能！");
+    }
+  </script>
+</body>
+</html>

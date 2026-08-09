@@ -1,0 +1,633 @@
+# 高級 Casino 風格輪盤 HTML
+
+```html
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>What To Eat</title>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Microsoft JhengHei",sans-serif;
+}
+
+body{
+  margin:0;
+
+  width:100vw;
+  height:100vh;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  overflow:hidden;
+
+  background:
+    radial-gradient(circle at center,#3a0000,#120000 45%,#000 100%);
+}
+
+body::before{
+  content:"";
+
+  position:fixed;
+  inset:0;
+
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,215,0,0.03),
+      rgba(255,215,0,0.03) 2px,
+      transparent 2px,
+      transparent 12px
+    );
+
+  pointer-events:none;
+}
+
+.container{
+  width:100%;
+
+  display:flex;
+  flex-direction:column;
+
+  justify-content:center;
+  align-items:center;
+
+  text-align:center;
+
+  padding:20px;
+
+  transform:translateX(-20px);
+}
+
+.title{
+  font-size:clamp(34px,7vw,72px);
+  font-weight:900;
+
+  line-height:0.95;
+
+  color:#ffe082;
+
+  letter-spacing:2px;
+
+  text-shadow:
+    0 0 8px #ffeb3b,
+    0 0 20px #ff9800,
+    0 0 40px rgba(255,215,0,0.8);
+
+  margin-bottom:18px;
+}
+
+.sub-title{
+  display:inline-block;
+
+  padding:14px 34px;
+
+  border-radius:999px;
+
+  background:
+    linear-gradient(to bottom,#4a0000,#1b0000);
+
+  border:2px solid #ffd54f;
+
+  color:#fff8e1;
+
+  font-size:clamp(18px,4vw,32px);
+  font-weight:bold;
+
+  box-shadow:
+    0 0 10px rgba(255,215,0,0.5),
+    inset 0 0 15px rgba(255,255,255,0.15);
+
+  margin-bottom:35px;
+}
+
+.wheel-wrapper{
+  position:relative;
+
+  width:min(92vw,620px);
+  height:min(92vw,620px);
+
+  margin:0 auto;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* 外圈燈泡 */
+
+.light{
+  position:absolute;
+
+  width:18px;
+  height:18px;
+
+  border-radius:50%;
+
+  background:#fff8c4;
+
+  box-shadow:
+    0 0 8px #fff176,
+    0 0 20px #ffd54f,
+    0 0 35px #ff9800;
+
+  animation:blink 0.7s infinite alternate;
+}
+
+@keyframes blink{
+
+  from{
+    opacity:0.3;
+    transform:scale(0.9);
+  }
+
+  to{
+    opacity:1;
+    transform:scale(1.25);
+  }
+}
+
+.pointer{
+  position:absolute;
+
+  top:-16px;
+  left:50%;
+
+  transform:translateX(-50%);
+
+  z-index:100;
+
+  width:0;
+  height:0;
+
+  border-left:28px solid transparent;
+  border-right:28px solid transparent;
+  border-top:85px solid #ff1744;
+
+  filter:
+    drop-shadow(0 0 10px rgba(255,0,0,0.8));
+}
+
+canvas{
+   width:88%;
+  height:88%;
+
+  border-radius:50%;
+
+  border:14px solid #d4af37;
+
+  background:#111;
+
+  box-shadow:
+    0 0 0 10px #6d4c00,
+    0 0 25px rgba(255,215,0,0.6),
+    0 0 60px rgba(255,215,0,0.35),
+    0 18px 50px rgba(0,0,0,0.7);
+}
+
+.buttons{
+  margin-top:20px;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  gap:18px;
+
+  flex-wrap:nowrap;
+}
+
+button{
+  width:min(38vw,180px);
+  height:min(16vw,78px);
+
+  border:none;
+  border-radius:18px;
+
+  cursor:pointer;
+
+  font-size:clamp(24px,5vw,40px);
+  font-weight:900;
+
+  color:white;
+
+  transition:0.15s;
+}
+
+button:active{
+  transform:translateY(4px);
+}
+
+#startBtn{
+  background:
+    linear-gradient(to bottom,#ff1744,#7f0000);
+
+  box-shadow:
+    0 0 20px rgba(255,0,0,0.7),
+    inset 0 0 12px rgba(255,255,255,0.3);
+}
+
+#resetBtn{
+  background:
+    linear-gradient(to bottom,#ffd54f,#ff9800);
+
+  color:#4e342e;
+
+  box-shadow:
+    0 0 20px rgba(255,215,0,0.7),
+    inset 0 0 12px rgba(255,255,255,0.3);
+}
+
+@media(max-width:480px){
+
+  .button{
+    font-size:24px;
+    height:62px;
+  }
+
+  .light{
+    width:14px;
+    height:14px;
+  }
+
+  .pointer{
+    border-left:22px solid transparent;
+    border-right:22px solid transparent;
+    border-top:70px solid #ff1744;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="title">
+    WHAT TO EAT
+  </div>
+
+  <div class="sub-title">
+    不知道吃什麼就轉一下!
+  </div>
+
+  <div class="wheel-wrapper" id="wheelWrapper">
+
+    <div class="pointer"></div>
+
+    <canvas
+      id="wheel"
+      width="560"
+      height="560">
+    </canvas>
+
+  </div>
+
+  <div class="buttons">
+
+    <button id="startBtn">
+      START
+    </button>
+
+    <button id="resetBtn">
+      RESET
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+
+const canvas =
+  document.getElementById("wheel");
+
+const ctx =
+  canvas.getContext("2d");
+
+const prizes = [
+
+  "火鍋", "牛排",
+  "拉麵", "餛飩",
+  "披薩", "炸雞",
+  "壽司", "便當",
+  "義大利麵", "咖哩",
+  "烏龍麵", "鍋貼",
+  "燒餅油條", "麥當勞",
+  "包子", "牛肉麵",
+  "鐵板燒", "燒烤",
+  "滷肉飯", "燒臘"
+];
+
+const colors = [
+
+  "#ff6b6b", // 火鍋
+  "#ffd166", // 牛排
+
+  "#06d6a0", // 拉麵
+  "#4cc9f0", // 漢堡
+
+  "#f72585", // 披薩
+  "#f77f00", // 炸雞
+
+  "#7209b7", // 壽司
+  "#ffca3a", // 便當
+
+  "#43aa8b", // 義大利麵
+  "#f9844a", // 咖哩
+
+  "#577590", // 燒臘
+  "#90be6d", // 鍋貼
+
+  "#ef476f", // 滷肉飯
+  "#118ab2", // 早餐店
+
+  "#faa307", // 滷味
+  "#9d4edd", // Subway
+
+  "#2a9d8f", // 鐵板燒
+  "#e63946", // 麥當勞
+
+  "#8ecae6", // 燒烤
+  "#ffafcc"  // 沙拉
+];
+
+const centerX = canvas.width / 2;
+const centerY = canvas.height / 2;
+
+const radius = 255;
+
+let currentAngle = 0;
+let spinning = false;
+
+/* 音效 */
+
+const spinSound =
+  new Audio(
+    "https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"
+  );
+
+spinSound.loop = false;
+
+/* 燈泡 */
+
+const wrapper =
+  document.getElementById("wheelWrapper");
+
+const totalLights = 40;
+
+for(let i=0;i<totalLights;i++){
+
+  const light =
+    document.createElement("div");
+
+  light.className = "light";
+
+  const angle =
+    (Math.PI * 2 / totalLights) * i;
+
+  const r = wrapper.offsetWidth / 2 - 12;
+
+  const center =
+    wrapper.offsetWidth / 2;
+
+  const x =
+    center + Math.cos(angle) * r;
+
+  const y =
+    center + Math.sin(angle) * r;
+
+  light.style.left =
+    `${x - 9}px`;
+
+  light.style.top =
+    `${y - 9}px`;
+
+  light.style.animationDelay =
+    `${i * 0.05}s`;
+
+  wrapper.appendChild(light);
+}
+
+function drawWheel(){
+
+  const arc =
+    Math.PI * 2 / prizes.length;
+
+  ctx.clearRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  for(let i=0;i<prizes.length;i++){
+
+    const angle =
+      currentAngle + i * arc;
+
+    ctx.beginPath();
+
+    ctx.moveTo(centerX,centerY);
+
+    ctx.arc(
+      centerX,
+      centerY,
+      radius,
+      angle,
+      angle + arc
+    );
+
+    ctx.fillStyle = colors[i];
+
+    ctx.fill();
+
+    ctx.lineWidth = 3;
+
+    ctx.strokeStyle = "#ffd54f";
+
+    ctx.stroke();
+
+    ctx.save();
+
+    ctx.translate(
+      centerX,
+      centerY
+    );
+
+    ctx.rotate(
+      angle + arc / 2
+    );
+
+    ctx.textAlign = "right";
+
+    ctx.fillStyle =
+      prizes[i] === "$0"
+      ? "#ffffff"
+      : "#ffe082";
+
+    ctx.font =
+      "bold 28px Microsoft JhengHei";
+
+    ctx.lineWidth = 5;
+
+    ctx.strokeStyle = "#fff8e1";
+
+    ctx.fillStyle = "#4e342e";
+
+    ctx.shadowColor = "#ffd54f";
+
+    ctx.shadowBlur = 15;
+
+    // 黑色外框
+    ctx.strokeText(
+      prizes[i],
+      radius - 28,
+      10
+    );
+
+    // 白色文字
+    ctx.fillText(
+      prizes[i],
+      radius - 28,
+      10
+    );
+
+    ctx.restore();
+  }
+
+  /* 中心圓 */
+
+  ctx.beginPath();
+
+  ctx.arc(
+    centerX,
+    centerY,
+    50,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.fillStyle = "#ffd54f";
+
+  ctx.fill();
+
+  ctx.lineWidth = 10;
+
+  ctx.strokeStyle = "#6d4c00";
+
+  ctx.stroke();
+}
+
+drawWheel();
+
+/* Start */
+
+document
+.getElementById("startBtn")
+.addEventListener("click",()=>{
+
+  if(spinning) return;
+
+  spinning = true;
+
+  spinSound.currentTime = 0;
+  spinSound.play();
+
+  // 第一聲播完後再播第二聲
+  setTimeout(()=>{
+
+  spinSound.currentTime = 0;
+  spinSound.play();
+
+  },2000);
+
+  const extraSpin =
+    Math.random() * 360 + 3600;
+
+  const duration = 5500;
+
+  const startTime =
+    performance.now();
+
+  const initialAngle =
+    currentAngle;
+
+  function animate(now){
+
+    const elapsed =
+      now - startTime;
+
+    const progress =
+      Math.min(
+        elapsed / duration,
+        1
+      );
+
+    const easeOut =
+      1 - Math.pow(
+        1 - progress,
+        4
+      );
+
+    currentAngle =
+      initialAngle +
+      (
+        extraSpin
+        * Math.PI
+        / 180
+      )
+      * easeOut;
+
+    drawWheel();
+
+    if(progress < 1){
+
+      requestAnimationFrame(
+        animate
+      );
+
+    }else{
+
+      spinning = false;
+
+      //spinSound.pause();
+    }
+  }
+
+  requestAnimationFrame(
+    animate
+  );
+
+});
+
+/* Reset */
+
+document
+.getElementById("resetBtn")
+.addEventListener("click",()=>{
+
+  currentAngle = 0;
+
+  spinning = false;
+
+  spinSound.pause();
+
+  drawWheel();
+
+});
+
+</script>
+
+</body>
+</html>
+```
