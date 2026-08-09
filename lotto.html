@@ -89,18 +89,18 @@ body{
 
 .reels{
     display:flex;
-    justify-content:center; /* 自動平均置中 */
+    justify-content:space-between; /* 讓第 1 格與第 6 格精準貼齊左右外框 */
     align-items:center;
-    gap: 1.5%;              /* 設定格子之間的固定間距 */
     position:absolute;
     top:43.6%;
-    left:14.2%;
-    width:69.6%;
+    /* 關鍵調整：縮小總寬度，並增加 left 讓整體往中間收攏 */
+    left: 15.6%;                    /* 原本是 14.2%，往右移縮回中間 */
+    width: 66.8%;                   /* 原本是 69.6%，縮小總寬度 */
     height:14%;
 }
 
 .reelBox{
-    flex: 1;                 /* 強制 6 格平分總寬度 */
+    flex: 0 0 13.8%;                /* 固定每格寬度 */
     height:118px;
     overflow:hidden;
     position:relative;
@@ -224,14 +224,13 @@ button:active{
 
     .reels{
         top:43.6%;
-        left:14.2%;
-        width:69.6%;
+        left: 15.6%;                 /* 與電腦版同步收攏 */
+        width:66.8%;
         height:14%;
-        gap: 1.5%;
     }
 
     .reelBox{
-        flex: 1; /* 手機版同樣保持 Flex 平分，不再設定 13.2% */
+        flex: 0 0 13.8%;             /* 保持百分比，確保手機上比例一致 */
         height:68px;
     }
 
