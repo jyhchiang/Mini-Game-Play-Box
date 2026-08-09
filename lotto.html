@@ -41,6 +41,7 @@ body{
     0 0 40px rgba(255,180,0,.5),
     inset 0 0 20px rgba(255,255,255,.3);
     position:relative;
+    container-type: inline-size; /* 讓子元素可以依據機台寬度自適應 */
 }
 
 /* 背景圖 */
@@ -68,25 +69,25 @@ body{
     pointer-events:none;
 }
 
-/* 數字區 */
+/* 數字區（關鍵自適應設定） */
 
 .reels{
     display:flex;
-    justify-content:space-between; /* 採用 space-between 配合微調 */
+    justify-content:space-between;
     align-items:center;
     position:absolute;
     top:43.6%;
-    left:15%;                     /* 將整體向右修正 0.8% */
-    width:68%;                    /* 縮小總寬度，防止外擴 */
-    height:14%;
+    left:14.2%;
+    width:70.2%;
+    height:14.2%;
 }
 
 .reelBox{
-    flex:0 0 13.2%;               /* 回歸精確比例 */
-    height:118px;
+    width: 14%;                   /* 每格精確平分比例 */
+    height: 100%;                 /* 隨父容器高度自動縮放 */
     overflow:hidden;
     position:relative;
-    border-radius:14px;
+    border-radius:8px;
     background:
     linear-gradient(
         to bottom,
@@ -100,11 +101,9 @@ body{
         #c99738 86%
     );
     box-shadow:
-    inset 0 12px 16px rgba(255,255,255,.52),
-    inset 0 0 18px rgba(255,245,200,.35),
-    inset 0 -10px 14px rgba(120,70,0,.22),
-    inset 3px 0 5px rgba(255,255,255,.22),
-    inset -3px 0 6px rgba(80,45,0,.12);
+    inset 0 4px 6px rgba(255,255,255,.52),
+    inset 0 0 8px rgba(255,245,200,.35),
+    inset 0 -4px 6px rgba(120,70,0,.22);
 }
 
 .reelBox.special{
@@ -124,11 +123,11 @@ body{
 }
 
 .num{
-    height:118px;
+    height: 100%;                /* 動態與容器同高 */
     display:flex;
     justify-content:center;
     align-items:center;
-    font-size:36px;
+    font-size: 4.2cqw;           /* 字體大小會跟著機台寬度精確放大縮小 */
     font-weight:900;
     color:#111;
     line-height:1;
@@ -138,12 +137,6 @@ body{
     0 0 6px rgba(255,220,120,.35);
     user-select:none;
 }
-
-/* 關鍵修正：將最左與最右的格子精準拉回框內 */
-.reelBox:nth-child(1){ transform:translateX(6px); }
-.reelBox:nth-child(2){ transform:translateX(3px); }
-.reelBox:nth-child(5){ transform:translateX(-3px); }
-.reelBox:nth-child(6){ transform:translateX(-6px); }
 
 /* 按鈕 */
 
@@ -206,33 +199,9 @@ button:active{
     100%{height:10px;}
 }
 
-/* 手機版修正 */
+/* 手機版適應 */
 
 @media(max-width:768px){
-
-    .reels{
-        top:43.6%;
-        left:15%;
-        width:68%;
-        height:14%;
-    }
-
-    .reelBox{
-        flex:0 0 13.2%;
-        height:68px;
-    }
-
-    /* 手機版微調補償 */
-    .reelBox:nth-child(1){ transform:translateX(3px); }
-    .reelBox:nth-child(2){ transform:translateX(1.5px); }
-    .reelBox:nth-child(5){ transform:translateX(-1.5px); }
-    .reelBox:nth-child(6){ transform:translateX(-3px); }
-
-    .num{
-        height:68px;
-        font-size:24px;
-    }
-
     .soundArea{
         left:5%;
         bottom:11.4%;
@@ -276,7 +245,7 @@ button:active{
     <!-- 音效波形 -->
 
     <div class="soundArea"
-    id="soundArea"></div>   
+    id="soundArea"></div>    
 
 </div>
 
@@ -297,6 +266,7 @@ for(let i=0;i<6;i++){
     let reel = document.createElement("div");
 
     reel.className = "reel";
+    reel.style.height = "100%"; // 確保輪盤滾動層跟隨高度
 
     for(let j=1;j<=49;j++){
 
@@ -483,8 +453,14 @@ async function startLottery(){
     const result =
     generateNumbers();
 
-    const itemHeight =
-    window.innerWidth <= 768 ? 68 : 118;
+    // 動態獲取當前單個號碼區塊的精確高度
+    const firstBox = document.querySelector(".reelBox");
+    const itemHeight = firstBox.clientHeight;
+
+    // 給每個號碼設定精確的高度，防止跑位
+    document.querySelectorAll(".num").forEach(n => {
+        n.style.height = itemHeight + "px";
+    });
 
     for(let i=0;i<reels.length;i++){
 
@@ -525,7 +501,7 @@ async function startLottery(){
                 setTimeout(()=>{
 
                     reel.style.transform =
-                   `translateY(-${finalNum * itemHeight}px)`;
+                    `translateY(-${finalNum * itemHeight}px)`;
 
                 },45);
 
