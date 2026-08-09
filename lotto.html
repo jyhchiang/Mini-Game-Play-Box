@@ -68,39 +68,21 @@ body{
     pointer-events:none;
 }
 
-/* 上方警示燈 */
-
-@keyframes flash{
-    from{opacity:.5;}
-    to{opacity:1;}
-}
-
-/* 標籤 */
-
-.labels .normal{
-    color:#003399;
-}
-
-.labels .special{
-    color:#c40000;
-}
-
 /* 數字區 */
 
 .reels{
     display:flex;
-    justify-content:space-between; /* 讓第 1 格與第 6 格精準貼齊左右外框 */
+    justify-content:space-between; /* 採用 space-between 配合微調 */
     align-items:center;
     position:absolute;
     top:43.6%;
-    /* 關鍵調整：縮小總寬度，並增加 left 讓整體往中間收攏 */
-    left: 15.6%;                    /* 原本是 14.2%，往右移縮回中間 */
-    width: 66.8%;                   /* 原本是 69.6%，縮小總寬度 */
+    left:15%;                     /* 將整體向右修正 0.8% */
+    width:68%;                    /* 縮小總寬度，防止外擴 */
     height:14%;
 }
 
 .reelBox{
-    flex: 0 0 13.8%;                /* 固定每格寬度 */
+    flex:0 0 13.2%;               /* 回歸精確比例 */
     height:118px;
     overflow:hidden;
     position:relative;
@@ -156,6 +138,12 @@ body{
     0 0 6px rgba(255,220,120,.35);
     user-select:none;
 }
+
+/* 關鍵修正：將最左與最右的格子精準拉回框內 */
+.reelBox:nth-child(1){ transform:translateX(6px); }
+.reelBox:nth-child(2){ transform:translateX(3px); }
+.reelBox:nth-child(5){ transform:translateX(-3px); }
+.reelBox:nth-child(6){ transform:translateX(-6px); }
 
 /* 按鈕 */
 
@@ -224,15 +212,21 @@ button:active{
 
     .reels{
         top:43.6%;
-        left: 15.6%;                 /* 與電腦版同步收攏 */
-        width:66.8%;
+        left:15%;
+        width:68%;
         height:14%;
     }
 
     .reelBox{
-        flex: 0 0 13.8%;             /* 保持百分比，確保手機上比例一致 */
+        flex:0 0 13.2%;
         height:68px;
     }
+
+    /* 手機版微調補償 */
+    .reelBox:nth-child(1){ transform:translateX(3px); }
+    .reelBox:nth-child(2){ transform:translateX(1.5px); }
+    .reelBox:nth-child(5){ transform:translateX(-1.5px); }
+    .reelBox:nth-child(6){ transform:translateX(-3px); }
 
     .num{
         height:68px;
