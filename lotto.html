@@ -214,26 +214,22 @@ button:active{
         width:3px;
     }
 }
-/* 單獨微調兩側號碼框位置 (乾淨版) */
+/* 用 Margin 強制推開左右號碼框 (加上 !important 確保不被 Flex 抵銷) */
 
 .reelBox:nth-child(1) {
-    position: relative;
-    left: 2.5%;
+    margin-right: 20px !important;
 }
 
 .reelBox:nth-child(2) {
-    position: relative;
-    left: 1.2%;
+    margin-right: 8px !important;
 }
 
 .reelBox:nth-child(5) {
-    position: relative;
-    left: -1.2%;
+    margin-left: 8px !important;
 }
 
 .reelBox:nth-child(6) {
-    position: relative;
-    left: -2.5%;
+    margin-left: 20px !important;
 }
 
 </style>
