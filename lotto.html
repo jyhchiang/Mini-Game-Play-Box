@@ -275,34 +275,37 @@ button:active{
    建立號碼輪盤
 ========================= */
 
+/* =========================
+   建立號碼輪盤 (JS 強制微調位移)
+========================= */
+
 const reelsDiv = document.getElementById("reels");
 
-for(let i=0;i<6;i++){
+// 定義 6 個框分別要向左/向右推的百分比
+const offsets = [3, 1.2, 0, 0, -1.2, -3]; 
+
+for(let i=0; i<6; i++){
 
     let box = document.createElement("div");
-
     box.className = "reelBox";
+    
+    // 直接用 JS 給予相對定位與位移，無視所有 CSS 衝突！
+    box.style.position = "relative";
+    box.style.left = offsets[i] + "%";
 
     let reel = document.createElement("div");
-
     reel.className = "reel";
 
-    for(let j=1;j<=49;j++){
-
+    for(let j=1; j<=49; j++){
         let num = document.createElement("div");
-
         num.className = "num";
-
         num.innerText = String(j).padStart(2,"0");
-
         reel.appendChild(num);
     }
 
     box.appendChild(reel);
-
     reelsDiv.appendChild(box);
 }
-
 /* =========================
    音效波形
 ========================= */
