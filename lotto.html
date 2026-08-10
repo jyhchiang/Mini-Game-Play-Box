@@ -214,28 +214,27 @@ button:active{
         width:3px;
     }
 }
-/* 單獨微調兩側號碼框位置 (改用 margin) */
+/* 單獨微調兩側號碼框位置 (改用 relative + left 強制移動) */
 
-/* 最左邊第 1 個：往右推 */
 .reelBox:nth-child(1) {
-    margin-left: 19px;
+    position: relative;
+    left: 8px; /* 正數代表往右移 */
 }
 
-/* 第 2 個：往右微推 */
 .reelBox:nth-child(2) {
-    margin-left: 15px;
+    position: relative;
+    left: 4px; /* 正數代表往右移 */
 }
 
-/* 第 5 個：往左微推 */
 .reelBox:nth-child(5) {
-    margin-right: 15px;
+    position: relative;
+    left: -4px; /* 負數代表往左移 */
 }
 
-/* 最右邊第 6 個：往左推 */
 .reelBox:nth-child(6) {
-    margin-right: 19px;
+    position: relative;
+    left: -8px; /* 負數代表往左移 */
 }
-
 </style>
 
 </head>
