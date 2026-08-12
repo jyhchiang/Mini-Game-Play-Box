@@ -6,6 +6,8 @@
 
 <title>台灣大樂透</title>
 
+<script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>    
+
 <style>
 
 *{
@@ -487,6 +489,15 @@ button:active{
 </div>
 
 <script>
+
+    // 1. 放在 script 最上方進行 LIFF 初始化
+    liff.init({
+        liffId: "2011084809-MYLu4GqQ"
+    }).then(() => {
+        console.log("LIFF 初始化成功！");
+    }).catch((err) => {
+        console.error("LIFF 初始化失敗：", err);
+    });    
 
 /* =========================
    建立號碼輪盤
