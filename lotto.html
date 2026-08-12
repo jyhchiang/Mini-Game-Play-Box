@@ -3,207 +3,470 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>台灣大樂透</title>
+
 <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
-body {
-    background: radial-gradient(circle at center, #5a3700 0%, #120b00 80%);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    padding: 15px;
+body{
+    background:
+    radial-gradient(circle at center,#5a3700 0%, #120b00 80%);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    padding:15px;
 }
 
 /* 主機台 */
-.machine {
-    width: 100%;
-    max-width: 700px;
-    margin: auto;
-    background: linear-gradient(to bottom, #ffd96d, #b67800);
-    border-radius: 30px;
-    padding: 20px;
-    overflow: hidden;
-    box-shadow: 0 0 40px rgba(255,180,0,.5), inset 0 0 20px rgba(255,255,255,.3);
-    position: relative;
+
+.machine{
+
+    width:100%;
+    max-width:700px;
+    margin:auto;
+
+    background:
+    linear-gradient(to bottom,#ffd96d,#b67800);
+
+    border-radius:30px;
+
+    padding:20px;
+
+    overflow:hidden;
+
+    box-shadow:
+    0 0 40px rgba(255,180,0,.5),
+    inset 0 0 20px rgba(255,255,255,.3);
+
+    position:relative;
 }
 
 /* 背景圖 */
-.machineBg {
-    width: 100%;
-    display: block;
-    user-select: none;
-    pointer-events: none;
-    -webkit-user-drag: none;
+
+.machineBg{
+
+    width:100%;
+
+    display:block;
+
+    user-select:none;
+
+    pointer-events:none;
+
+    -webkit-user-drag:none;
 }
 
-.machine::before {
-    content: "";
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
-    border-radius: 25px;
-    border: 3px solid rgba(255,255,255,.3);
-    box-shadow: inset 0 0 25px rgba(255,255,255,.25), 0 0 25px rgba(255,200,0,.2);
-    pointer-events: none;
+.machine::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:10px;
+    left:10px;
+    right:10px;
+    bottom:10px;
+
+    border-radius:25px;
+
+    border:3px solid rgba(255,255,255,.3);
+
+    box-shadow:
+
+    inset 0 0 25px rgba(255,255,255,.25),
+
+    0 0 25px rgba(255,200,0,.2);
+
+    pointer-events:none;
+}
+
+/* 上方警示燈 */
+
+@keyframes flash{
+
+    from{opacity:.5;}
+    to{opacity:1;}
+}
+
+/* 標籤 */
+
+.labels .normal{
+
+    color:#003399;
+}
+
+.labels .special{
+
+    color:#c40000;
 }
 
 /* 數字區 */
-.reels {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: absolute;
-    top: 43.6%;
-    left: 14.2%;
-    width: 69%;
-    height: 14%;
+
+.reels{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    position:absolute;
+
+    top:43.6%;
+
+    left:14.2%;
+
+    width:69%;
+
+    height:14%;
 }
 
-.reelBox {
-    flex: 0 0 13.2%;
-    height: 118px;
-    overflow: hidden;
-    position: relative;
-    border-radius: 14px;
-    background: linear-gradient(to bottom, #fff9df 0%, #fff2c7 5%, #f7dfa0 18%, #e9c56d 30%, #ffeeb8 60%, #f6d983 68%, #dfb85f 72%, #c99738 86%);
-    box-shadow: inset 0 12px 16px rgba(255,255,255,.52), inset 0 0 18px rgba(255,245,200,.35), inset 0 -10px 14px rgba(120,70,0,.22), inset 3px 0 5px rgba(255,255,255,.22), inset -3px 0 6px rgba(80,45,0,.12);
+.reelBox{
+
+    flex:0 0 13.2%;
+
+    height:118px;
+
+    overflow:hidden;
+
+    position:relative;
+
+    border-radius:14px;
+
+    background:
+
+    linear-gradient(
+        to bottom,
+
+        /* 上方受光淡金 */
+
+        #fff9df 0%,
+
+        #fff2c7 5%,
+
+        /* 上方往後彎 */
+
+        #f7dfa0 18%,
+
+        #e9c56d 30%,
+
+        /* 中間凸起亮面 */
+
+        #ffeeb8 60%,
+
+        #f6d983 68%,
+
+        /* 下方開始內彎 */
+
+        #dfb85f 72%,
+
+        #c99738 86%
+
+    );
+
+    box-shadow:
+
+    /* 上方強受光 */
+
+    inset 0 12px 16px rgba(255,255,255,.52),
+
+    /* 中間凸起亮面 */
+
+    inset 0 0 18px rgba(255,245,200,.35),
+
+    /* 下方內凹陰影 */
+
+    inset 0 -10px 14px rgba(120,70,0,.22),
+
+    /* 左側金屬反光 */
+
+    inset 3px 0 5px rgba(255,255,255,.22),
+
+    /* 右側立體陰影 */
+
+    inset -3px 0 6px rgba(80,45,0,.12);
 }
 
-.reel {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    transform: translateY(0);
-    transition: transform .045s linear;
-    will-change: transform;
-    backface-visibility: hidden;
-    transform-style: preserve-3d;
+.reelBox.special{
+
+    border-color:#c40000;
 }
 
-.num {
-    height: 118px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 36px;
-    font-weight: 900;
-    color: #111;
-    line-height: 1;
-    text-align: center;
-    transform: translateY(-1px);
-    text-shadow: 0 2px 3px rgba(0,0,0,.45), 0 0 6px rgba(255,220,120,.35);
-    user-select: none;
+.reel{
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    transform:translateY(0);
+
+    transition:
+    transform .045s linear;
+
+    will-change:transform;
+
+    backface-visibility:hidden;
+
+    transform-style:preserve-3d;
+
 }
 
-.reelBox:nth-child(1) { transform: translateX(5.5px); }
-.reelBox:nth-child(2) { transform: translateX(1.2px); }
-.reelBox:nth-child(5) { transform: translateX(-2.5px); }
-.reelBox:nth-child(6) { transform: translateX(-6px); }
+.num{
 
-.hitBtn {
-    position: absolute;
-    left: 35%;
-    bottom: 20.5%;
-    width: 30%;
-    height: 11%;
-    opacity: 0;
-    cursor: pointer;
-    z-index: 50;
-    border: none;
-    background: transparent;
+    height:118px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:36px;
+
+    font-weight:900;
+
+    color:#111;
+
+    line-height:1;
+
+    text-align:center;
+
+    transform:translateY(-1px);
+
+    text-shadow:
+    0 2px 3px rgba(0,0,0,.45),  
+    0 0 6px rgba(255,220,120,.35);
+
+    user-select:none;
+}
+
+/* 左邊兩輪往左 */
+
+.reelBox:nth-child(1){
+
+    transform:translateX(5.5px);
+}
+
+.reelBox:nth-child(2){
+
+    transform:translateX(1.2px);
+}
+
+/* 右邊兩輪往右 */
+
+.reelBox:nth-child(5){
+
+    transform:translateX(-2.5px);
+}
+
+.reelBox:nth-child(6){
+
+    transform:translateX(-6px);
+}
+
+/* 按鈕 */
+
+button:active{
+
+    transform:translateY(5px);
+    box-shadow:none;
+}
+
+.hitBtn{
+
+    position:absolute;
+
+    left:35%;
+
+    bottom:20.5%;
+
+    width:30%;
+
+    height:11%;
+
+    opacity:0;
+
+    cursor:pointer;
+
+    z-index:50;
+
+    border:none;
+
+    background:transparent;
 }
 
 /* 音效波形 */
-.soundArea {
+
+.soundArea{
     position: absolute;
-    left: 7%;
-    bottom: 11.8%;
-    width: 85%;
+    left: 7%;        /* 往左推到邊緣 */
+    bottom: 11.8%;   /* 貼合溝槽高度 */
+    width: 85%;      /* 寬度大幅拉開填滿溝槽 */
     height: 17%;
     overflow: hidden;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* 讓柱子均勻散佈到最左與最右 */
     align-items: flex-end;
-    gap: 1.5px;
+    gap: 1.5px;      /* 縮小間距，讓波形可以伸展得更開 */
     padding: 0 4px;
 }
 
-.bar {
-    width: 4px;
-    min-height: 8px;
-    border-radius: 999px;
-    background: linear-gradient(to top, #ff9900, #ffd84d, #fff3a0);
-    animation: sound .45s infinite ease-in-out;
-    animation-play-state: paused;
-    box-shadow: 0 0 5px #ffcc00, 0 0 12px #ff9900;
+.bar{
+
+    width:4px;
+
+    min-height:8px;
+
+    border-radius:999px;
+
+    background:
+    linear-gradient(
+        to top,
+        #ff9900,
+        #ffd84d,
+        #fff3a0
+    );
+
+    animation:
+    sound .45s infinite ease-in-out;
+
+    animation-play-state:paused;
+
+    box-shadow:
+    0 0 5px #ffcc00,
+    0 0 12px #ff9900;
 }
 
-@keyframes sound {
-    0% { height: 5px; }
-    50% { height: 26px; }
-    100% { height: 10px; }
+@keyframes sound{
+
+    0%{height:5px;}
+    50%{height:26px;}
+    100%{height:10px;}
 }
 
-/* 手機版 RWD */
-@media(max-width:768px) {
-    .reels {
-        top: 43%;
-        left: 14.2%;
-        width: 69%;
-        height: 14%;
-    }
-    .reelBox {
-        flex: 0 0 13.2%;
-        height: 68px;
-    }
-    .reelBox:nth-child(1) { transform: translateX(9.5px); }
-    .reelBox:nth-child(2) { transform: translateX(5px); }
-    .reelBox:nth-child(3) { transform: translateX(1.5px); }
-    .reelBox:nth-child(4) { transform: translateX(-0.5px); }
-    .reelBox:nth-child(5) { transform: translateX(-4px); }
-    .reelBox:nth-child(6) { transform: translateX(-9px); }
+/* 手機版 */
 
-    .num {
-        height: 68px;
-        font-size: 24px;
+@media(max-width:768px){
+
+    .reels{
+
+        top:43%;
+
+        left:14.2%;
+
+        width:69%;
+
+        height:14%;
     }
 
-    .soundArea {
-        left: 10%;
-        bottom: 13.5%;
-        width: 79%;
-        height: 11%;
-        gap: 2px;
-        padding: 0 4px;
+    .reelBox{
+
+        flex:0 0 13.2%;
+
+        height:68px;
     }
 
-    .bar {
-        width: 3px;
+    .reelBox:nth-child(1){
+
+        transform:translateX(9.5px);
+    }
+
+    .reelBox:nth-child(2){
+
+        transform:translateX(5px);
+    }
+
+    .reelBox:nth-child(3){
+        transform: translateX(1.5px); /* 3號框手機版往右微調 */
+    }
+    
+    .reelBox:nth-child(4){
+        transform: translateX(-0.5px); /* 4號框手機版往左微調 */
+    }
+
+    .reelBox:nth-child(5){
+
+        transform:translateX(-4px);
+    }
+
+    .reelBox:nth-child(6){
+
+        transform:translateX(-9px);
+    }
+
+    .num{
+
+        height:68px;
+
+        font-size:24px;
+    }
+
+    .soundArea{
+
+        left:10%;
+
+        bottom:13.5%;
+
+        width:79%;
+
+        height:11%;
+
+        gap:2px;
+
+        padding:0 4px;
+    }
+
+    .bar{
+
+        width:3px;
     }
 }
+
 </style>
 </head>
 
 <body>
 
 <div class="machine">
-    <img src="images/lotto.png" class="machineBg">
-    <div class="reels" id="reels"></div>
-    <button class="hitBtn" onclick="startLottery()"></button>
-    <div class="soundArea" id="soundArea"></div>   
+
+    <!-- 背景拉霸機圖片 -->
+
+    <img
+    src="images/lotto.png"
+    class="machineBg">
+
+    <!-- 數字區 -->
+
+    <div class="reels"
+    id="reels"></div>
+
+    <!-- 透明按鈕 -->
+
+    <button
+    class="hitBtn"
+    onclick="startLottery()">
+    </button>
+
+    <!-- 音效波形 -->
+
+    <div class="soundArea"
+    id="soundArea"></div>   
+
 </div>
 
 <script>
@@ -214,15 +477,21 @@ body {
         }).then(() => {
             console.log("LIFF 初始化成功！");
         }).catch((err) => {
-            console.error("LIFF 初始化失敗：", err);
+            console.error("LIFF 初始化失敗，但遊戲繼續執行：", err);
         });
+    } else {
+        console.warn("未偵測到 LIFF SDK，以普通網頁模式運行");
     }
 
-    // 建立輪盤
+    /* =========================
+       建立號碼輪盤
+    ========================= */
     const reelsDiv = document.getElementById("reels");
+
     for (let i = 0; i < 6; i++) {
         let box = document.createElement("div");
         box.className = "reelBox";
+
         let reel = document.createElement("div");
         reel.className = "reel";
 
@@ -232,13 +501,17 @@ body {
             num.innerText = String(j).padStart(2, "0");
             reel.appendChild(num);
         }
+
         box.appendChild(reel);
         reelsDiv.appendChild(box);
     }
 
-    // 音效波形
+    /* =========================
+       音效波形
+    ========================= */
     const soundArea = document.getElementById("soundArea");
     const bars = [];
+
     for (let i = 0; i < 65; i++) {
         const bar = document.createElement("div");
         bar.className = "bar";
@@ -247,7 +520,9 @@ body {
         bars.push(bar);
     }
 
-    // Web Audio API 音效
+    /* =========================
+       Web Audio API 音效
+    ========================= */
     let audioCtx;
     function initAudio() {
         if (!audioCtx) {
@@ -255,6 +530,7 @@ body {
         }
     }
 
+    /* 拉霸轉動音 */
     function playSpin() {
         if (!audioCtx) return;
         const osc = audioCtx.createOscillator();
@@ -268,6 +544,7 @@ body {
         osc.stop(audioCtx.currentTime + 0.04);
     }
 
+    /* 停止音效 */
     function playStop() {
         if (!audioCtx) return;
         const osc = audioCtx.createOscillator();
@@ -278,10 +555,14 @@ body {
         osc.connect(gain);
         gain.connect(audioCtx.destination);
         osc.start();
-        osc.frequency.exponentialRampToValueAtTime(60, audioCtx.currentTime + 0.3);
+        osc.frequency.exponentialRampToValueAtTime(
+            60,
+            audioCtx.currentTime + 0.3
+        );
         osc.stop(audioCtx.currentTime + 0.3);
     }
 
+    /* 中獎完成音 */
     function playWin() {
         if (!audioCtx) return;
         const notes = [523, 659, 784, 1046];
@@ -298,16 +579,25 @@ body {
         });
     }
 
+    /* =========================
+       隨機號碼
+    ========================= */
     function generateNumbers() {
         let nums = [];
         while (nums.length < 6) {
             let n = Math.floor(Math.random() * 49) + 1;
-            if (!nums.includes(n)) nums.push(n);
+            if (!nums.includes(n)) {
+                nums.push(n);
+            }
         }
         return nums;
     }
 
+    /* =========================
+       開獎動畫
+    ========================= */
     let running = false;
+
     async function startLottery() {
         if (running) return;
         running = true;
@@ -339,11 +629,14 @@ body {
                     playSpin();
 
                     let elapsed = Date.now() - start;
+
                     if (elapsed >= duration) {
                         clearInterval(spin);
                         let finalNum = result[i] - 1;
 
+                        /* 撞擊感 */
                         reel.style.transform = `translateY(-${finalNum * itemHeight - 4}px)`;
+
                         setTimeout(() => {
                             reel.style.transform = `translateY(-${finalNum * itemHeight}px)`;
                         }, 45);
@@ -357,6 +650,7 @@ body {
 
         playWin();
 
+        /* 音效波形停止 */
         bars.forEach(bar => {
             bar.style.animationPlayState = "paused";
             bar.style.height = Math.floor(Math.random() * 8 + 5) + "px";
