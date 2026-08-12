@@ -489,8 +489,7 @@ button:active{
 </div>
 
 <script>
-    
-    // 1. LIFF 初始化（加入 catch 避免報錯導致網頁崩潰）
+    // 1. LIFF 初始化
     if (typeof liff !== 'undefined') {
         liff.init({
             liffId: "2011084809-MYLu4GqQ"
@@ -501,284 +500,175 @@ button:active{
         });
     } else {
         console.warn("未偵測到 LIFF SDK，以普通網頁模式運行");
-    }    
-
-/* =========================
-   建立號碼輪盤
-========================= */
-
-const reelsDiv = document.getElementById("reels");
-
-for(let i=0;i<6;i++){
-
-    let box = document.createElement("div");
-
-    box.className = "reelBox";
-
-    let reel = document.createElement("div");
-
-    reel.className = "reel";
-
-    for(let j=1;j<=49;j++){
-
-        let num = document.createElement("div");
-
-        num.className = "num";
-
-        num.innerText = String(j).padStart(2,"0");
-
-        reel.appendChild(num);
     }
 
-    box.appendChild(reel);
+    /* =========================
+       建立號碼輪盤
+    ========================= */
+    const reelsDiv = document.getElementById("reels");
 
-    reelsDiv.appendChild(box);
-}
+    for (let i = 0; i < 6; i++) {
+        let box = document.createElement("div");
+        box.className = "reelBox";
 
-/* =========================
-   音效波形
-========================= */
+        let reel = document.createElement("div");
+        reel.className = "reel";
 
-const soundArea = document.getElementById("soundArea");
-
-const bars = [];
-
-for(let i=0;i<65;i++){
-
-    const bar = document.createElement("div");
-
-    bar.className = "bar";
-
-    bar.style.animationDelay =
-        (Math.random()*0.6)+"s";
-
-    soundArea.appendChild(bar);
-    bars.push(bar);
-}
-
-/* =========================
-   Web Audio API 音效
-========================= */
-
-const audioCtx =
-new(window.AudioContext ||
-window.webkitAudioContext)();
-
-/* 拉霸轉動音 */
-
-function playSpin(){
-
-    const osc = audioCtx.createOscillator();
-
-    const gain = audioCtx.createGain();
-
-    osc.type = "square";
-
-    osc.frequency.value =
-        400 + Math.random()*200;
-
-    gain.gain.value = 0.03;
-
-    osc.connect(gain);
-
-    gain.connect(audioCtx.destination);
-
-    osc.start();
-
-    osc.stop(audioCtx.currentTime + 0.04);
-}
-
-/* 停止音效 */
-
-function playStop(){
-
-    const osc = audioCtx.createOscillator();
-
-    const gain = audioCtx.createGain();
-
-    osc.type = "triangle";
-
-    osc.frequency.value = 220;
-
-    gain.gain.value = 0.15;
-
-    osc.connect(gain);
-
-    gain.connect(audioCtx.destination);
-
-    osc.start();
-
-    osc.frequency.exponentialRampToValueAtTime(
-        60,
-        audioCtx.currentTime + 0.3
-    );
-
-    osc.stop(audioCtx.currentTime + 0.3);
-}
-
-/* 中獎完成音 */
-
-function playWin(){
-
-    const notes = [523,659,784,1046];
-
-    notes.forEach((freq,index)=>{
-
-        const osc =
-        audioCtx.createOscillator();
-
-        const gain =
-        audioCtx.createGain();
-
-        osc.type = "sine";
-
-        osc.frequency.value = freq;
-
-        gain.gain.value = 0.08;
-
-        osc.connect(gain);
-
-        gain.connect(audioCtx.destination);
-
-        osc.start(
-            audioCtx.currentTime + index*0.12
-        );
-
-        osc.stop(
-            audioCtx.currentTime + index*0.12 + 0.2
-        );
-    });
-}
-
-/* =========================
-   隨機號碼
-========================= */
-
-function generateNumbers(){
-
-    let nums = [];
-
-    while(nums.length < 6){
-
-        let n =
-        Math.floor(Math.random()*49)+1;
-
-        if(!nums.includes(n)){
-
-            nums.push(n);
+        for (let j = 1; j <= 49; j++) {
+            let num = document.createElement("div");
+            num.className = "num";
+            num.innerText = String(j).padStart(2, "0");
+            reel.appendChild(num);
         }
+
+        box.appendChild(reel);
+        reelsDiv.appendChild(box);
     }
 
-    return nums;
-}
+    /* =========================
+       音效波形
+    ========================= */
+    const soundArea = document.getElementById("soundArea");
+    const bars = [];
 
-/* =========================
-   開獎動畫
-========================= */
-
-let running = false;
-
-async function startLottery(){
-
-    document.body.style.cursor = "wait";
-
-    if(running) return;
-
-    running = true;
-
-    bars.forEach(bar=>{
-
-    bar.style.animationPlayState = "running";
-    
-    });
-
-
-    if(audioCtx.state === "suspended"){
-
-        await audioCtx.resume();
+    for (let i = 0; i < 65; i++) {
+        const bar = document.createElement("div");
+        bar.className = "bar";
+        bar.style.animationDelay = (Math.random() * 0.6) + "s";
+        soundArea.appendChild(bar);
+        bars.push(bar);
     }
 
-    const reels =
-    document.querySelectorAll(".reel");
+    /* =========================
+       Web Audio API 音效
+    ========================= */
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-    const result =
-    generateNumbers();
+    /* 拉霸轉動音 */
+    function playSpin() {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = "square";
+        osc.frequency.value = 400 + Math.random() * 200;
+        gain.gain.value = 0.03;
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.04);
+    }
 
-    const itemHeight =
-    window.innerWidth <= 768 ? 68 : 118;
+    /* 停止音效 */
+    function playStop() {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = "triangle";
+        osc.frequency.value = 220;
+        gain.gain.value = 0.15;
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.frequency.exponentialRampToValueAtTime(
+            60,
+            audioCtx.currentTime + 0.3
+        );
+        osc.stop(audioCtx.currentTime + 0.3);
+    }
 
-    for(let i=0;i<reels.length;i++){
+    /* 中獎完成音 */
+    function playWin() {
+        const notes = [523, 659, 784, 1046];
+        notes.forEach((freq, index) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = "sine";
+            osc.frequency.value = freq;
+            gain.gain.value = 0.08;
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(audioCtx.currentTime + index * 0.12);
+            osc.stop(audioCtx.currentTime + index * 0.12 + 0.2);
+        });
+    }
 
-    let reel = reels[i];
-
-    let duration =
-    700 + i*260;
-
-    let start = Date.now();
-
-    await new Promise(resolve=>{
-
-        const spin = setInterval(()=>{
-
-            let rand =
-            Math.floor(Math.random()*49);
-
-            reel.style.transform =
-            `translateY(-${rand * itemHeight}px)`;
-
-            playSpin();
-
-            let elapsed =
-            Date.now() - start;
-
-            if(elapsed >= duration){
-
-                clearInterval(spin);
-
-                let finalNum =
-                result[i]-1;
-
-                /* 撞擊感 */
-
-                reel.style.transform =
-                `translateY(-${finalNum * itemHeight - 4}px)`;
-
-                setTimeout(()=>{
-
-                    reel.style.transform =
-                   `translateY(-${finalNum * itemHeight}px)`;
-
-                },45);
-
-                playStop();
-
-                setTimeout(resolve,80);
+    /* =========================
+       隨機號碼
+    ========================= */
+    function generateNumbers() {
+        let nums = [];
+        while (nums.length < 6) {
+            let n = Math.floor(Math.random() * 49) + 1;
+            if (!nums.includes(n)) {
+                nums.push(n);
             }
+        }
+        return nums;
+    }
 
-        },32);
+    /* =========================
+       開獎動畫
+    ========================= */
+    let running = false;
 
-    });
+    async function startLottery() {
+        if (running) return;
+        running = true;
 
-}
+        document.body.style.cursor = "wait";
 
-    playWin();
+        bars.forEach(bar => {
+            bar.style.animationPlayState = "running";
+        });
 
-    /* 音效波形停止 */
+        if (audioCtx.state === "suspended") {
+            await audioCtx.resume();
+        }
 
-    bars.forEach(bar=>{
+        const reels = document.querySelectorAll(".reel");
+        const result = generateNumbers();
+        const itemHeight = window.innerWidth <= 768 ? 68 : 118;
 
-        bar.style.animationPlayState = "paused";
+        for (let i = 0; i < reels.length; i++) {
+            let reel = reels[i];
+            let duration = 700 + i * 260;
+            let start = Date.now();
 
-        bar.style.height =
-        Math.floor(Math.random()*8+5)+"px";
-    });
+            await new Promise(resolve => {
+                const spin = setInterval(() => {
+                    let rand = Math.floor(Math.random() * 49);
+                    reel.style.transform = `translateY(-${rand * itemHeight}px)`;
+                    playSpin();
 
-    running = false;
+                    let elapsed = Date.now() - start;
 
-    document.body.style.cursor = "default";
+                    if (elapsed >= duration) {
+                        clearInterval(spin);
+                        let finalNum = result[i] - 1;
 
-}
+                        /* 撞擊感 */
+                        reel.style.transform = `translateY(-${finalNum * itemHeight - 4}px)`;
 
+                        setTimeout(() => {
+                            reel.style.transform = `translateY(-${finalNum * itemHeight}px)`;
+                        }, 45);
+
+                        playStop();
+                        setTimeout(resolve, 80);
+                    }
+                }, 32);
+            });
+        }
+
+        playWin();
+
+        /* 音效波形停止 */
+        bars.forEach(bar => {
+            bar.style.animationPlayState = "paused";
+            bar.style.height = Math.floor(Math.random() * 8 + 5) + "px";
+        });
+
+        running = false;
+        document.body.style.cursor = "default";
+    }
 </script>
 
 </body>
