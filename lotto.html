@@ -328,31 +328,19 @@ button:active{
 /* 音效波形 */
 
 .soundArea{
-
-    position:absolute;
-
-    left:14%;
-
-    bottom:11.9%;
-
-    width:72%;
-
-    height:14%;
-
-    overflow:hidden;
-
-    display:flex;
-
-    justify-content: space-between; /* 讓波形條均勻分佈到最兩端 */
-
-    justify-content:center;
-
-    align-items:flex-end;
-
-    gap:3px;
-
-    padding:0 8px;
+    position: absolute;
+    left: 6%;        /* 往左推到邊緣 */
+    bottom: 12.2%;   /* 貼合溝槽高度 */
+    width: 88%;      /* 寬度大幅拉開填滿溝槽 */
+    height: 14%;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between; /* 讓柱子均勻散佈到最左與最右 */
+    align-items: flex-end;
+    gap: 1.5px;      /* 縮小間距，讓波形可以伸展得更開 */
+    padding: 0 4px;
 }
+
 
 .bar{
 
