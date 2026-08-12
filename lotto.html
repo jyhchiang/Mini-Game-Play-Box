@@ -489,15 +489,19 @@ button:active{
 </div>
 
 <script>
-
-    // 1. 放在 script 最上方進行 LIFF 初始化
-    liff.init({
-        liffId: "2011084809-MYLu4GqQ"
-    }).then(() => {
-        console.log("LIFF 初始化成功！");
-    }).catch((err) => {
-        console.error("LIFF 初始化失敗：", err);
-    });    
+    
+    // 1. LIFF 初始化（加入 catch 避免報錯導致網頁崩潰）
+    if (typeof liff !== 'undefined') {
+        liff.init({
+            liffId: "2011084809-MYLu4GqQ"
+        }).then(() => {
+            console.log("LIFF 初始化成功！");
+        }).catch((err) => {
+            console.error("LIFF 初始化失敗，但遊戲繼續執行：", err);
+        });
+    } else {
+        console.warn("未偵測到 LIFF SDK，以普通網頁模式運行");
+    }    
 
 /* =========================
    建立號碼輪盤
