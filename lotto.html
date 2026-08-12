@@ -93,13 +93,18 @@ body{
 
 /* 上方警示燈 */
 
+
 @keyframes flash{
 
     from{opacity:.5;}
     to{opacity:1;}
 }
 
+/* 標題 */
+
+
 /* 標籤 */
+
 
 .labels .normal{
 
@@ -171,7 +176,11 @@ body{
 
         #dfb85f 72%,
 
-        #c99738 86%
+        #c99738 86%,
+
+        /* 下方陰影但保持淡金 */
+
+        /* #b98525 100% */ 
 
     );
 
@@ -195,7 +204,12 @@ body{
 
     /* 右側立體陰影 */
 
-    inset -3px 0 6px rgba(80,45,0,.12);
+    inset -3px 0 6px rgba(80,45,0,.12),
+
+    /* 外層淡金屬光 */
+
+    /* 0 0 6px rgba(255,220,120,.16); */
+    
 }
 
 .reelBox.special{
@@ -281,6 +295,8 @@ body{
 
 /* 按鈕 */
 
+
+
 button:active{
 
     transform:translateY(5px);
@@ -310,6 +326,7 @@ button:active{
     background:transparent;
 }
 
+
 /* 音效波形 */
 
 .soundArea{
@@ -325,6 +342,7 @@ button:active{
     gap: 1.5px;      /* 縮小間距，讓波形可以伸展得更開 */
     padding: 0 4px;
 }
+
 
 .bar{
 
@@ -392,11 +410,11 @@ button:active{
     }
 
     .reelBox:nth-child(3){
-        transform: translateX(1.5px); /* 3號框手機版往右微調 */
+    transform: translateX(1.5px); /* 3號框手機版往右微調 */
     }
     
     .reelBox:nth-child(4){
-        transform: translateX(-0.5px); /* 4號框手機版往左微調 */
+    transform: translateX(-0.5px); /* 4號框手機版往左微調 */
     }
 
     .reelBox:nth-child(5){
@@ -408,6 +426,7 @@ button:active{
 
         transform:translateX(-9px);
     }
+
 
     .num{
 
@@ -523,16 +542,10 @@ button:active{
     /* =========================
        Web Audio API 音效
     ========================= */
-    let audioCtx;
-    function initAudio() {
-        if (!audioCtx) {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-    }
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     /* 拉霸轉動音 */
     function playSpin() {
-        if (!audioCtx) return;
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = "square";
@@ -546,7 +559,6 @@ button:active{
 
     /* 停止音效 */
     function playStop() {
-        if (!audioCtx) return;
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = "triangle";
@@ -564,7 +576,6 @@ button:active{
 
     /* 中獎完成音 */
     function playWin() {
-        if (!audioCtx) return;
         const notes = [523, 659, 784, 1046];
         notes.forEach((freq, index) => {
             const osc = audioCtx.createOscillator();
@@ -602,16 +613,15 @@ button:active{
         if (running) return;
         running = true;
 
-        initAudio();
-        if (audioCtx && audioCtx.state === "suspended") {
-            await audioCtx.resume();
-        }
-
         document.body.style.cursor = "wait";
 
         bars.forEach(bar => {
             bar.style.animationPlayState = "running";
         });
+
+        if (audioCtx.state === "suspended") {
+            await audioCtx.resume();
+        }
 
         const reels = document.querySelectorAll(".reel");
         const result = generateNumbers();
