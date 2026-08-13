@@ -460,10 +460,7 @@ button:active{
 
     <!-- 透明按鈕 -->
 
-    <button
-    class="hitBtn"
-    onclick="startLottery()">
-    </button>
+    
 
     <!-- 音效波形 -->
 
@@ -632,15 +629,7 @@ button:active{
 
         playWin();
 
-        /* 音效波形停止 */
-        bars.forEach(bar => {
-            bar.style.animationPlayState = "paused";
-            bar.style.height = Math.floor(Math.random() * 8 + 5) + "px";
-        });
-
-        running = false;
-        document.body.style.cursor = "default";
-    }
+        
 </script>
 
 </body>
