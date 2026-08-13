@@ -20,10 +20,9 @@ body{
     radial-gradient(circle at center,#5a3700 0%, #120b00 80%);
     min-height:100vh;
     display:flex;
-    flex-direction:column;
     justify-content:center;
     align-items:center;
-    overflow:x-hidden;
+    overflow:hidden;
     padding:15px;
 }
 
@@ -287,7 +286,7 @@ body{
 
 button:active{
 
-    transform:translateY(2px);
+    transform:translateY(5px);
     box-shadow:none;
 }
 
@@ -312,37 +311,6 @@ button:active{
     border:none;
 
     background:transparent;
-}
-
-/* 分享按鈕樣式 */
-.share-container {
-    width: 100%;
-    max-width: 700px;
-    display: flex;
-    justify-content: center;
-    margin-top: 18px;
-}
-
-.btn.share-btn {
-    background-color: #06C755;
-    color: #ffffff;
-    width: 80%;
-    max-width: 320px;
-    height: 48px;
-    font-size: 17px;
-    font-weight: bold;
-    border: none;
-    border-radius: 24px;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    transition: background-color 0.2s ease, transform 0.1s ease;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.btn.share-btn:hover {
-    background-color: #05b34c;
 }
 
 /* 音效波形 */
@@ -502,13 +470,6 @@ button:active{
     <div class="soundArea"
     id="soundArea"></div>   
 
-</div>
-
-<!-- 分享按鈕 -->
-<div class="share-container">
-    <button class="btn share-btn" onclick="shareGame()">
-        🔗 分享給好友一起玩
-    </button>
 </div>
 
 <script>
@@ -679,23 +640,6 @@ button:active{
 
         running = false;
         document.body.style.cursor = "default";
-    }
-
-    /* =========================
-       分享遊戲功能
-    ========================= */
-    function shareGame() {
-        const gameUrl = window.location.href;
-        
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(gameUrl).then(() => {
-                alert("已複製遊戲連結！快去貼給 LINE 好友一起玩吧！");
-            }).catch(() => {
-                alert("請點擊右上角『...』分享給好友！");
-            });
-        } else {
-            alert("請點擊右上角『...』分享給好友！");
-        }
     }
 </script>
 
