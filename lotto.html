@@ -20,9 +20,10 @@ body{
     radial-gradient(circle at center,#5a3700 0%, #120b00 80%);
     min-height:100vh;
     display:flex;
+    flex-direction:column;
     justify-content:center;
     align-items:center;
-    overflow:hidden;
+    overflow:x-hidden;
     padding:15px;
 }
 
@@ -174,11 +175,7 @@ body{
 
         #dfb85f 72%,
 
-        #c99738 86%,
-
-        /* 下方陰影但保持淡金 */
-
-        /* #b98525 100% */ 
+        #c99738 86%
 
     );
 
@@ -202,12 +199,7 @@ body{
 
     /* 右側立體陰影 */
 
-    inset -3px 0 6px rgba(80,45,0,.12),
-
-    /* 外層淡金屬光 */
-
-    /* 0 0 6px rgba(255,220,120,.16); */
-    
+    inset -3px 0 6px rgba(80,45,0,.12);
 }
 
 .reelBox.special{
@@ -293,11 +285,9 @@ body{
 
 /* 按鈕 */
 
-
-
 button:active{
 
-    transform:translateY(5px);
+    transform:translateY(2px);
     box-shadow:none;
 }
 
@@ -324,6 +314,36 @@ button:active{
     background:transparent;
 }
 
+/* 分享按鈕樣式 */
+.share-container {
+    width: 100%;
+    max-width: 700px;
+    display: flex;
+    justify-content: center;
+    margin-top: 18px;
+}
+
+.btn.share-btn {
+    background-color: #06C755;
+    color: #ffffff;
+    width: 80%;
+    max-width: 320px;
+    height: 48px;
+    font-size: 17px;
+    font-weight: bold;
+    border: none;
+    border-radius: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn.share-btn:hover {
+    background-color: #05b34c;
+}
 
 /* 音效波形 */
 
@@ -340,7 +360,6 @@ button:active{
     gap: 1.5px;      /* 縮小間距，讓波形可以伸展得更開 */
     padding: 0 4px;
 }
-
 
 .bar{
 
@@ -408,11 +427,11 @@ button:active{
     }
 
     .reelBox:nth-child(3){
-    transform: translateX(1.5px); /* 3號框手機版往右微調 */
+        transform: translateX(1.5px); /* 3號框手機版往右微調 */
     }
     
     .reelBox:nth-child(4){
-    transform: translateX(-0.5px); /* 4號框手機版往左微調 */
+        transform: translateX(-0.5px); /* 4號框手機版往左微調 */
     }
 
     .reelBox:nth-child(5){
@@ -424,7 +443,6 @@ button:active{
 
         transform:translateX(-9px);
     }
-
 
     .num{
 
@@ -484,6 +502,13 @@ button:active{
     <div class="soundArea"
     id="soundArea"></div>   
 
+</div>
+
+<!-- 分享按鈕 -->
+<div class="share-container">
+    <button class="btn share-btn" onclick="shareGame()">
+        🔗 分享給好友一起玩
+    </button>
 </div>
 
 <script>
@@ -654,6 +679,23 @@ button:active{
 
         running = false;
         document.body.style.cursor = "default";
+    }
+
+    /* =========================
+       分享遊戲功能
+    ========================= */
+    function shareGame() {
+        const gameUrl = window.location.href;
+        
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(gameUrl).then(() => {
+                alert("已複製遊戲連結！快去貼給 LINE 好友一起玩吧！");
+            }).catch(() => {
+                alert("請點擊右上角『...』分享給好友！");
+            });
+        } else {
+            alert("請點擊右上角『...』分享給好友！");
+        }
     }
 </script>
 
