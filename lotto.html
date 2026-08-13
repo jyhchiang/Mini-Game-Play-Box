@@ -6,8 +6,6 @@
 
 <title>台灣大樂透</title>
 
-
-
 <style>
 
 *{
@@ -91,31 +89,6 @@ body{
     pointer-events:none;
 }
 
-/* 上方警示燈 */
-
-
-@keyframes flash{
-
-    from{opacity:.5;}
-    to{opacity:1;}
-}
-
-/* 標題 */
-
-
-/* 標籤 */
-
-
-.labels .normal{
-
-    color:#003399;
-}
-
-.labels .special{
-
-    color:#c40000;
-}
-
 /* 數字區 */
 
 .reels{
@@ -153,63 +126,22 @@ body{
 
     linear-gradient(
         to bottom,
-
-        /* 上方受光淡金 */
-
         #fff9df 0%,
-
         #fff2c7 5%,
-
-        /* 上方往後彎 */
-
         #f7dfa0 18%,
-
         #e9c56d 30%,
-
-        /* 中間凸起亮面 */
-
         #ffeeb8 60%,
-
         #f6d983 68%,
-
-        /* 下方開始內彎 */
-
         #dfb85f 72%,
-
-        #c99738 86%,
-
-        /* 下方陰影但保持淡金 */
-
-        /* #b98525 100% */ 
-
+        #c99738 86%
     );
 
     box-shadow:
-
-    /* 上方強受光 */
-
     inset 0 12px 16px rgba(255,255,255,.52),
-
-    /* 中間凸起亮面 */
-
     inset 0 0 18px rgba(255,245,200,.35),
-
-    /* 下方內凹陰影 */
-
     inset 0 -10px 14px rgba(120,70,0,.22),
-
-    /* 左側金屬反光 */
-
     inset 3px 0 5px rgba(255,255,255,.22),
-
-    /* 右側立體陰影 */
-
-    inset -3px 0 6px rgba(80,45,0,.12),
-
-    /* 外層淡金屬光 */
-
-    /* 0 0 6px rgba(255,220,120,.16); */
-    
+    inset -3px 0 6px rgba(80,45,0,.12);
 }
 
 .reelBox.special{
@@ -295,8 +227,6 @@ body{
 
 /* 按鈕 */
 
-
-
 button:active{
 
     transform:translateY(5px);
@@ -326,39 +256,21 @@ button:active{
     background:transparent;
 }
 
-/*    
-/* 透明分享按鈕定位 */
-.shareBtn {
-    position: absolute;
-    left: 75%;       /* 調整按鈕水平位置 (例如 75% 在右側) */
-    bottom: 20.5%;    /* 調整按鈕垂直位置 */
-    width: 20%;      /* 調整按鈕寬度 */
-    height: 11%;     /* 調整按鈕高度 */
-    opacity: 0;      /* 設定透明，露出底下的背景圖 */
-    cursor: pointer;
-    z-index: 50;
-    border: none;
-    background: transparent;
-}
-*/
-
-
 /* 音效波形 */
 
 .soundArea{
     position: absolute;
-    left: 7%;        /* 往左推到邊緣 */
-    bottom: 11.8%;   /* 貼合溝槽高度 */
-    width: 85%;      /* 寬度大幅拉開填滿溝槽 */
+    left: 7%;
+    bottom: 11.8%;
+    width: 85%;
     height: 17%;
     overflow: hidden;
     display: flex;
-    justify-content: space-between; /* 讓柱子均勻散佈到最左與最右 */
+    justify-content: space-between;
     align-items: flex-end;
-    gap: 1.5px;      /* 縮小間距，讓波形可以伸展得更開 */
+    gap: 1.5px;
     padding: 0 4px;
 }
-
 
 .bar{
 
@@ -426,11 +338,11 @@ button:active{
     }
 
     .reelBox:nth-child(3){
-    transform: translateX(1.5px); /* 3號框手機版往右微調 */
+        transform: translateX(1.5px);
     }
     
     .reelBox:nth-child(4){
-    transform: translateX(-0.5px); /* 4號框手機版往左微調 */
+        transform: translateX(-0.5px);
     }
 
     .reelBox:nth-child(5){
@@ -442,7 +354,6 @@ button:active{
 
         transform:translateX(-9px);
     }
-
 
     .num{
 
@@ -497,11 +408,6 @@ button:active{
     onclick="startLottery()">
     </button>
 
-    /*
-    <!-- 透明分享按鈕（蓋在背景圖的分享位置） -->
-    <button class="shareBtn" onclick="shareToFriends()"></button>
-    */
-
     <!-- 音效波形 -->
 
     <div class="soundArea"
@@ -510,7 +416,6 @@ button:active{
 </div>
 
 <script>
-    
 
     /* =========================
        建立號碼輪盤
@@ -679,8 +584,6 @@ button:active{
         running = false;
         document.body.style.cursor = "default";
     }
-
-    
 </script>
 
 </body>
