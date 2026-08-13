@@ -680,11 +680,24 @@ button:active{
        LINE 分享功能
     ========================= */
     function shareToFriends() {
-        const shareText = "我剛剛用台灣大樂透拉霸機試了運氣！快來拉出你的幸運號碼：\n" + window.location.href;
-        
-        // 透過 LINE Share 協定直接觸發 LINE 好友分享選擇器
-        window.location.href = `https://line.me/R/share?text=${encodeURIComponent(shareText)}`;
-    }
+        const shareText = "快來跟我一起玩「迷你遊戲盒」！\n" + window.location.href;
+    
+        // 1. 如果是在手機瀏覽器，優先使用原生分享面板
+        if (navigator.share) {
+            navigator.share({
+                title: '迷你遊戲盒',
+                text: '快來跟我一起玩！',
+                url: window.location.href,
+            }).catch((err) => {
+                console.log('取消分享或發生錯誤:', err);
+            });
+        } else {
+            // 2. 如果是在電腦版/不支援原生的瀏覽器，直接開啟 LINE 分享頁面
+            const lineUrl = `https://line.me/R/share?text=${encodeURIComponent(shareText)}`;
+            window.open(lineUrl, '_blank');
+        }
+}
+
     
 </script>
 
