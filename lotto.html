@@ -326,6 +326,20 @@ button:active{
     background:transparent;
 }
 
+/* 透明分享按鈕定位 */
+.shareBtn {
+    position: absolute;
+    left: 75%;       /* 調整按鈕水平位置 (例如 75% 在右側) */
+    bottom: 20.5%;    /* 調整按鈕垂直位置 */
+    width: 20%;      /* 調整按鈕寬度 */
+    height: 11%;     /* 調整按鈕高度 */
+    opacity: 0;      /* 設定透明，露出底下的背景圖 */
+    cursor: pointer;
+    z-index: 50;
+    border: none;
+    background: transparent;
+}
+
 
 /* 音效波形 */
 
@@ -480,6 +494,9 @@ button:active{
     class="hitBtn"
     onclick="startLottery()">
     </button>
+
+    <!-- 透明分享按鈕（蓋在背景圖的分享位置） -->
+    <button class="shareBtn" onclick="shareToFriends()"></button>
 
     <!-- 音效波形 -->
 
@@ -658,6 +675,17 @@ button:active{
         running = false;
         document.body.style.cursor = "default";
     }
+
+    /* =========================
+       LINE 分享功能
+    ========================= */
+    function shareToFriends() {
+        const shareText = "我剛剛用台灣大樂透拉霸機試了運氣！快來拉出你的幸運號碼：\n" + window.location.href;
+        
+        // 透過 LINE Share 協定直接觸發 LINE 好友分享選擇器
+        window.location.href = `https://line.me/R/share?text=${encodeURIComponent(shareText)}`;
+    }
+    
 </script>
 
 </body>
